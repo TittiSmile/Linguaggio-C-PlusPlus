@@ -1,0 +1,295 @@
+#include <iostream>
+using namespace std;
+typedef struct LISTA
+{
+    int primo;
+    struct LISTA *next;
+}nodo;
+
+void menu();
+nodo*nelem(int a);
+nodo*intesta(nodo*p,int a);
+nodo*incoda(nodo*p,int a);
+nodo*ricerca(nodo*p,int a);
+nodo*elimina(nodo*p);
+int occorrenza(nodo*p,int a);///
+nodo*elocc(nodo*p,int a);///
+bool pari(nodo*p);
+int somma(nodo*p);
+nodo*primi(nodo*p);
+void stampa(nodo*p);
+nodo*rewerse(nodo*p);
+
+
+
+int main ()
+{
+    nodo*l=NULL;
+    int scelta,num;
+
+    menu();
+    do{
+       cout<<"\t\tCosa scegli?"<<endl;
+       cin>> scelta;
+        switch(scelta)
+        {
+        case 1:
+            cout<<"inserire un elemento in testa"<<endl;
+            cin>> num;
+            l=intesta(l,num);
+            break;
+        case 2:
+            cout<<"inserire un elemento in coda"<<endl;
+            cin>>num;
+            l=incoda(l,num);
+            break;
+        case 3:
+            cout<<"che elemento vuoi cercare?"<<endl;
+            cin>>num;
+            l=ricerca(l,num);
+            if(ricerca(l,num))
+            {
+                cout<<"elemento trovato"<<endl;
+            }
+            else
+            {
+                cout<<"elemento NON trovato"<<endl;
+            }
+            break;
+        case 4:
+            cout<<"elimino la lista"<<endl;
+            l=elimina(l);
+            break;
+        case 5:
+            cout<<"di quale numero vuoi contare le occorrenze?"<<endl;
+            cin>> num;
+            cout<<"le occorrenze di "<<num<<" sono: "<<occorrenza(l,num)<<endl;
+            break;
+        case 6:
+            cout<<"di quale numero vuoi eliminare le occorrenze?"<<endl;
+            cin>>num;
+            l=elocc(l,num);
+            break;
+        case 7:
+            cout<<"controllo se la somma degli elementi della lista sono pari"<<endl;
+            if(pari(l)==true)
+            {
+                cout<<"la somma degli elementi e' PARI"<<endl;
+            }
+            else
+            {
+                cout<<"la somma degli elementi e' DISPARI"<<endl;
+            }
+            break;
+        case 8:
+            cout<<"ritorno la lista con i soli numeri primi"<<endl;
+            l=primi(l);
+            break;
+        case 9:
+            cout<<"stampo la lista"<<endl;
+            if(l==NULL)
+            {
+                cout<<"lista VUOTA!"<<endl;
+            }
+            else
+            {
+                stampa(l);
+            }
+            break;
+        case 10:
+            cout<<"stampo al contrario"<<endl;
+            if(l==NULL)
+            {
+               cout<<"lista VUOTA!"<<endl;
+            }
+            else
+            {
+                l=rewerse(l);
+            }
+            break;
+        case 11:
+            cout<<"arrivederci"<<endl;
+            break;
+        default:
+            cout<<"scelta errata"<<endl;
+            break;
+        }
+
+    }while(scelta!=11);
+
+    return 0;
+}
+
+
+
+
+void menu()
+{
+    cout<<"1)aggiungi in testa\n2)aggiungi in coda\n3)ricerca valore\n4)elimina lista\n5)conta le occorrenze"<< endl;
+    cout<<"6)elimina occorrenze\n7)controlla se la somma dei numeri della lista e' pari\n8)ritorna i valori primi"<< endl;
+    cout<<"9)stampa\n10)stampa al contrario\n11)esci"<< endl;
+
+}
+
+nodo*nelem(int a)
+{
+    nodo*q=new nodo;
+    q->primo=a;
+    q->next=NULL;
+    return q;
+}
+
+nodo*intesta(nodo*p,int a)
+{
+    nodo*q=nelem(a);
+    q->next=p;
+    return q;
+}
+
+
+nodo*incoda(nodo*p,int a)
+{
+    if(p==NULL)
+    {
+        p=nelem(a);
+    }
+    else
+    {
+        p->next=incoda(p->next,a);
+    }
+    return p;
+}
+
+nodo*ricerca(nodo*p,int a)
+{
+    nodo*trovato;
+    for(;p!=NULL && trovato==NULL;p=p->next)
+    {
+        if(p->primo==a)
+        {
+            trovato=p;
+        }
+    }
+    return trovato;
+}
+
+nodo*elimina(nodo*p)
+{
+    nodo*tmp;
+    for(;p!=NULL;p=tmp)
+    {
+        tmp=p->next;
+        p->next=NULL;
+        delete p;
+    }
+    return p;
+}
+
+int occorrenza(nodo*p,int a)///
+{
+  int flag=0;
+  if(p!=NULL)
+  {
+      if(p->primo==a)
+      {
+          flag=1+occorrenza(p->next,a);
+      }
+      else
+      {
+          flag=occorrenza(p->next,a);
+      }
+  }
+    return flag;
+}
+
+nodo*elocc(nodo*p,int a)///
+{
+    nodo*tmp=p;
+    if(p!=NULL)
+    {
+        if(p->primo==a)
+        {
+         tmp=p;
+         p=p->next;
+         delete tmp;
+        }
+    }
+    return p;
+}
+
+bool pari(nodo*p)
+{
+    int somma=0;
+    while(p!=NULL)
+    {
+        somma=somma+p->primo;
+        p=p->next;
+        if(somma/2==0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}
+
+int somma(nodo*p)
+{
+    int sum=0;
+    if(p==NULL)
+    {
+        return 0;
+    }
+    else
+    {
+        sum=somma(p->next);
+        sum=sum+p->primo;
+        return sum;
+    }
+}
+
+nodo*primi(nodo*p)
+{
+    nodo*tmp=p;
+    if(p!=NULL)
+    {
+        if(p->primo%2==0)
+        {
+            p->next=NULL;
+            delete tmp;
+        }
+        else
+        {
+            p->next=primi(p->next);
+        }
+    }
+    return p;
+}
+
+
+void stampa(nodo*p)
+{
+    while(p!=NULL)
+    {
+        cout<<"\n"<< p->primo<< endl;
+        p=p->next;
+    }
+}
+
+nodo*rewerse(nodo*p)
+{
+    if(p==NULL)
+    {
+        return 0;
+    }
+    rewerse(p->next);
+    cout<<"\n"<<p->primo<< endl;
+}
+
+
+
+
+
+
