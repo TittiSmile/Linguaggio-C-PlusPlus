@@ -1,2 +1,6 @@
 # Linguaggio-C++
-Esercizi fatti in linguaggio c++ all'università 
+Esercizi fatti in linguaggio C++.
+Si possono trovare:
+  - esercizi incompleti
+  - esercizi sbagliati
+  - esercizi simili tra loro
